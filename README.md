@@ -1,6 +1,6 @@
 Hey. Use these commands to run me. You won't regret it
 
-sdl HMI
+Generic HMI
 
 master branch:
 
