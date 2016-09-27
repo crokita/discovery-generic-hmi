@@ -11,11 +11,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl
 
 # Download Generic HMI from github 
-RUN mkdir -p /usr/app \
+RUN mkdir -p /usr/app/webapp \
     && curl -sSL https://github.com/smartdevicelink/generic_hmi/archive/$SDL_HMI_BRANCH.tar.gz \
-    | tar -v -C /usr/app -xz --strip-components 1
+    | tar -v -C /usr/app/webapp -xz --strip-components 1
 
-WORKDIR /usr/app/generic_hmi
+WORKDIR /usr/app/webapp
 # Copy SDL Core start script into container
 COPY setup.sh setup.sh
 
@@ -25,10 +25,12 @@ RUN ldconfig
 # Install dependencies
 RUN npm install -g webpack
 RUN npm install
+# Rebuild environment
+RUN npm rebuild node-sass
 
 # Expose the following ports
-#   3001:  Returns index.html of HMI
-EXPOSE 3001
+#   3000:  Returns index.html of HMI
+EXPOSE 3000
 
 # Run nginx
 CMD ["/bin/bash", "setup.sh"]
