@@ -3,12 +3,13 @@ FROM node:6.3.1
 
 MAINTAINER Chris Rokita version:0.1
 
-ENV SDL_HMI_BRANCH master 
+ENV SDL_HMI_BRANCH manticore 
 ENV HMI_WEBSOCKET_ADDR 127.0.0.1:8087
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl
+    curl \
+    nginx
 
 # Download Generic HMI from github 
 RUN mkdir -p /usr/app/webapp \
@@ -18,6 +19,12 @@ RUN mkdir -p /usr/app/webapp \
 WORKDIR /usr/app/webapp
 # Copy SDL Core start script into container
 COPY setup.sh setup.sh
+
+# Delete default nginx configuration
+RUN rm -v /etc/nginx/nginx.conf
+
+# Copy our new configuration
+COPY nginx.conf /etc/nginx/
 
 # Configure logger
 RUN ldconfig
@@ -29,8 +36,8 @@ RUN npm install
 RUN npm rebuild node-sass
 
 # Expose the following ports
-#   3000:  Returns index.html of HMI
-EXPOSE 3000
+#   8080:  Returns index.html of HMI
+EXPOSE 8080
 
 # Run nginx
 CMD ["/bin/bash", "setup.sh"]
