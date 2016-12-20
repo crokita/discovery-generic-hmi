@@ -4,4 +4,4 @@ Generic HMI
 
 master branch:
 
-```docker run -d -p 3000:3000 -e "HMI_WEBSOCKET_ADDR=127.0.0.1:8080" --name hmi-generic crokita/discovery-generic-hmi:master```
+```docker run -d -p 8080:8080 -p 9000:9000 -e "BROKER_WEBSOCKET_ADDR=127.0.0.1:9000" -e "HMI_WEBSOCKET_ADDR=127.0.0.1:8087" --name hmi crokita/discovery-generic-hmi:master```
