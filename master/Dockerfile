@@ -4,8 +4,8 @@ FROM node:6.3.1
 MAINTAINER Chris Rokita version:0.1
 
 ENV SDL_HMI_BRANCH manticore 
-ENV HMI_WEBSOCKET_ADDR 127.0.0.1:8087
-ENV BROKER_WEBSOCKET_ADDR 127.0.0.1:9000
+ENV BROKER_TO_CORE_ADDR 127.0.0.1:8087
+ENV HMI_TO_BROKER_ADDR 127.0.0.1:9000
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
