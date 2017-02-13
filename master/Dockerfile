@@ -3,7 +3,6 @@ FROM node:6.3.1
 
 MAINTAINER Chris Rokita version:0.1
 
-ENV SDL_HMI_BRANCH manticore 
 ENV BROKER_TO_CORE_ADDR 127.0.0.1:8087
 ENV HMI_TO_BROKER_ADDR 127.0.0.1:9000
 
@@ -13,11 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \
     supervisor
 
-# Download Generic HMI from github 
-RUN mkdir -p /usr/app/webapp \
-	mkdir -p /usr/app/broker \
-    && curl -sSL https://github.com/smartdevicelink/generic_hmi/archive/$SDL_HMI_BRANCH.tar.gz \
-    | tar -v -C /usr/app/webapp -xz --strip-components 1 \
+# Download Broker from github 
+RUN mkdir -p /usr/app/broker \
     && curl -sSL https://github.com/smartdevicelink/sdl_broker/archive/master.tar.gz \
     | tar -v -C /usr/app/broker -xz --strip-components 1
 
@@ -25,7 +21,9 @@ RUN mkdir -p /usr/app/webapp \
 WORKDIR /usr/app/broker
 RUN npm install
 
-WORKDIR /usr/app/webapp
+COPY generic_hmi /usr/app/generic_hmi
+WORKDIR /usr/app/generic_hmi
+
 # Copy SDL Core start script into container
 COPY setup.sh setup.sh
 
