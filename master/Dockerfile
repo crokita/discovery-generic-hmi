@@ -47,6 +47,9 @@ RUN npm install
 # Rebuild environment
 RUN npm rebuild node-sass
 
+# Run webpack so we can guarantee the bundle.js file exists
+RUN webpack
+
 # Expose the following ports
 #   8080:  Returns index.html of HMI
 #   9000:  Websocket connection to the broker
