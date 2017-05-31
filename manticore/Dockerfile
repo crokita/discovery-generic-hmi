@@ -1,5 +1,5 @@
 # This image has node and npm preinstalled
-FROM node:6.3.1
+FROM node:7.10.0-slim
 
 MAINTAINER Chris Rokita version:0.1
 
@@ -41,14 +41,19 @@ RUN ldconfig
 # Copy supervisor config
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Install dependencies
-RUN npm install -g webpack
-RUN npm install
-# Rebuild environment
-RUN npm rebuild node-sass
-
-# Run webpack so we can guarantee the bundle.js file exists
-RUN webpack
+# Install dependencies and run webpack so we can guarantee the bundle.js file exists
+# Remove everything but the build/bundle.js file and the index.html file 
+RUN npm install -g webpack \
+	&& npm install \
+	&& npm rebuild node-sass \
+	&& webpack \
+	&& mv build /usr/app/tmpbuild \
+	&& mv index.html /usr/app/tmpindex.html \
+	&& mv setup.sh /usr/app/tmpsetup.sh \
+	&& rm -rf * \
+	&& mv /usr/app/tmpbuild build \
+	&& mv /usr/app/tmpindex.html index.html \
+	&& mv /usr/app/tmpsetup.sh setup.sh 
 
 # Expose the following ports
 #   8080:  Returns index.html of HMI
