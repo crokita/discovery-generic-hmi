@@ -43,10 +43,9 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Install dependencies and run webpack so we can guarantee the bundle.js file exists
 # Remove everything but the build/bundle.js file and the index.html file 
-RUN npm install -g webpack \
-	&& npm install \
+RUN npm install \
 	&& npm rebuild node-sass \
-	&& webpack \
+	&& ./node_modules/webpack/bin/webpack.js \
 	&& mv build /usr/app/tmpbuild \
 	&& mv index.html /usr/app/tmpindex.html \
 	&& mv setup.sh /usr/app/tmpsetup.sh \
